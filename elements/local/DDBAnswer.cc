@@ -13,7 +13,7 @@ Packet *DDBAnswer::simple_action(Packet *p) {
 	struct in_addr dst = iph_in->ip_dst;
 	struct in_addr src = iph_in->ip_src;
 	// get 4 tuples
-//	click_chatter("DEBUG: packet %s -> %s received", src, dst);
+	click_chatter("DEBUG: packet %s -> %s received", src, dst);
 
 	struct DDBProto *proto = (struct DDBProto*)p->data();
 	String s = String(proto->Data, strnlen(proto->Data, DDBPROTO_DATA_LEN));
