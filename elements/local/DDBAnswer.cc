@@ -26,7 +26,7 @@ Packet *DDBAnswer::simple_action(Packet *p) {
 	resp.T = DDBPROTO_ANSWER;
 	resp.Len = DDBPROTO_LEN_B;
 	memcpy(resp.Data, res.c_str(), DDBPROTO_DATA_LEN);
-	WritablePacket *q Packet::make(headroom, &resp, sizeof(DDBProto), 0);
+	WritablePacket *q = Packet::make(headroom, &resp, sizeof(DDBProto), 0);
 	p->kill();
 
 	return q;
