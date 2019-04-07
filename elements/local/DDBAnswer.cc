@@ -9,9 +9,9 @@ DDBAnswer::DDBAnswer() { };
 DDBAnswer::~DDBAnswer() { };
 
 Packet *DDBAnswer::simple_action(Packet *p) {
-//	const click_ip *iph_in = p->ip_header();
-//	struct in_addr dst = iph_in->ip_dst;
-//	struct in_addr src = iph_in->ip_src;
+	const click_ip *iph_in = p->ip_header();
+	struct in_addr dst = iph_in->ip_dst;
+	struct in_addr src = iph_in->ip_src;
 	// get 4 tuples
 //	click_chatter("DEBUG: packet %s -> %s received", src, dst);
 
