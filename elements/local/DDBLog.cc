@@ -26,7 +26,7 @@ void DDBLog::run_timer(Timer *t) {
 	_timer.reschedule_after_sec(_tick);
 
 	if (_answers.empty()) {
-		click_chatter("LOG is empty");
+		//click_chatter("LOG is empty");
 		return;
 	}
 
