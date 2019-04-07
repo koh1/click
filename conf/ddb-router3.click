@@ -49,7 +49,7 @@ out0 :: Queue(200) -> todevice0 :: ToDevice(enp0s3);
 //c0[0] -> ar0 :: ARPResponder(10.0.2.15 02:48:3e:15:b5:0c) -> out0;
 arpq0 :: ARPQuerier(10.0.2.15, 02:48:3e:15:b5:0c) -> out0;
 //c0[1] -> arpt;
-//arpt[0] -> [1]arpq0;
+arpt[0] -> [1]arpq0;
 //c0[2] -> Paint(1) -> ip;
 //c0[3] -> Print("enp0s3 non-IP") -> Discard;
 
