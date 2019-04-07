@@ -33,8 +33,12 @@
 #  The netmask on that interface; and
 #  The router's Ethernet address on that interface.
 # This setup for blackisle -> plebic -> darkstar.
-my $ifs = [ [ "eth0", 1, "18.26.4.92", "255.255.255.0", "00:00:C0:3B:71:EF" ],
-            [ "eth1", 1, "1.0.0.1", "255.0.0.0", "00:00:C0:CA:68:EF" ],
+my $ifs = [
+  [ "enp0s3", 1, "10.0.2.15", "255.255.255.0", "02:48:3e:15:b5:0c" ],
+  [ "enp0s8", 1, "172.16.101.11", "255.255.255.0", "08:00:27:de:92:4c" ],
+  [ "enp0s9", 1, "172.16.102.11", "255.255.255.0", "08:00:27:36:70:32" ],
+  [ "enp0s10", 1, "172.16.103.11", "255.255.255.0", "08:00:27:86:96:5a" ],
+  [ "enp0s16", 1, "172.16.108.11", "255.255.255.0", "08:00:27:d7:6e:7b" ]
 #           [ "eth2", 1, "2.0.0.1", "255.0.0.0", "00:00:C0:8A:67:EF" ],
            ];
 
@@ -53,11 +57,19 @@ if ($#ARGV >= 0) {
 #   The gateway IP address (next hop);
 #   The output network interface name.
 # A default route (mask 0.0.0.0) can be specified as the last entry.
-my $srts = [ [ "0.0.0.0", "0.0.0.0", "18.26.4.1", "eth0" ]
+my $srts = [
+  [ "172.16.104.0", "255.255.255.0", "172.16.102.12", "enp0s9" ],
+  [ "172.16.105.0", "255.255.255.0", "172.16.103.13", "enp0s10" ],
+  [ "172.16.106.0", "255.255.255.0", "172.16.102.12", "enp0s9" ],
+  [ "172.16.107.0", "255.255.255.0", "172.16.103.13", "enp0s10" ],
+  [ "172.16.109.0", "255.255.255.0", "172.16.102.12", "enp0s9" ],
+  [ "172.16.110.0", "255.255.255.0", "172.16.103.13", "enp0s10" ],
+  [ "0.0.0.0", "0.0.0.0", "10.0.2.2", "enp0s3" ]
 	   ];
 
 # Set to, e.g., "Print(toh) -> Discard" for user-level.
-my $local_host = "ToHost";
+#my $local_host = "ToHost";
+my $local_host = "Print(toh) -> Discard";
 
 # Set to 1 if you want the configuration to handle ICMP echo requests itself.
 my $handle_pings = 0;
@@ -89,7 +101,7 @@ for($i = 0; $i < $nifs; $i++){
 
     my $dirbcast = ($ii & $mask) | ~$mask;	# Directed broadcast.
     push @routes, sprintf("%s/32 0", i2ip($dirbcast));
-    
+
     push @interfaces, $ifs->[$i]->[2] . '/' . $ifs->[$i]->[3];
 
     push @routes, sprintf("%s/32 0", i2ip($ii & $mask));
