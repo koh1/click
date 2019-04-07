@@ -4,8 +4,6 @@
 // enp0s9 172.16.102.11 08:00:27:36:70:32
 // enp0s10 172.16.103.11 08:00:27:86:96:5a
 // enp0s16 172.16.108.11 08:00:27:d7:6e:7b
-$define($DIRIP 172.16.101.101);
-
 
 // Shared IP input path and routing table
 ip :: Strip(14)
@@ -60,7 +58,7 @@ ddb_cl :: DDBClassifier;
 
 // Input and output paths for enp0s8
 c1 :: Classifier(12/0806 20/0001, 12/0806 20/0002, 12/0800, -);
-PollDevice(enp0s8) -> c1;
+FromDevice(enp0s8) -> c1;
 out1 :: Queue(200) -> todevice1 :: ToDevice(enp0s8);
 c1[0] -> ar1 :: ARPResponder(172.16.101.11 08:00:27:de:92:4c) -> out1;
 arpq1 :: ARPQuerier(172.16.101.11, 08:00:27:de:92:4c) -> out1;
@@ -79,7 +77,7 @@ c1[3] -> Print("enp0s8 non-IP") -> Discard;
 
 // Input and output paths for enp0s9
 c2 :: Classifier(12/0806 20/0001, 12/0806 20/0002, 12/0800, -);
-PollDevice(enp0s9) -> c2;
+FromDevice(enp0s9) -> c2;
 out2 :: Queue(200) -> todevice2 :: ToDevice(enp0s9);
 c2[0] -> ar2 :: ARPResponder(172.16.102.11 08:00:27:36:70:32) -> out2;
 arpq2 :: ARPQuerier(172.16.102.11, 08:00:27:36:70:32) -> out2;
@@ -98,7 +96,7 @@ c2[3] -> Print("enp0s9 non-IP") -> Discard;
 
 // Input and output paths for enp0s10
 c3 :: Classifier(12/0806 20/0001, 12/0806 20/0002, 12/0800, -);
-PollDevice(enp0s10) -> c3;
+FromDevice(enp0s10) -> c3;
 out3 :: Queue(200) -> todevice3 :: ToDevice(enp0s10);
 c3[0] -> ar3 :: ARPResponder(172.16.103.11 08:00:27:86:96:5a) -> out3;
 arpq3 :: ARPQuerier(172.16.103.11, 08:00:27:86:96:5a) -> out3;
@@ -117,7 +115,7 @@ c3[3] -> Print("enp0s10 non-IP") -> Discard;
 
 // Input and output paths for enp0s16
 c4 :: Classifier(12/0806 20/0001, 12/0806 20/0002, 12/0800, -);
-PollDevice(enp0s16) -> c4;
+FromDevice(enp0s16) -> c4;
 out4 :: Queue(200) -> todevice4 :: ToDevice(enp0s16);
 c4[0] -> ar4 :: ARPResponder(172.16.108.11 08:00:27:d7:6e:7b) -> out4;
 arpq4 :: ARPQuerier(172.16.108.11, 08:00:27:d7:6e:7b) -> out4;
