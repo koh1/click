@@ -20,7 +20,7 @@ Packet *DDBAnswer::simple_action(Packet *p) {
 
 	struct DDBProto *proto = (struct DDBProto*)p->data();
 	String s = String(proto->Data, strnlen(proto->Data, DDBPROTO_DATA_LEN));
-	click_chatter("RECEIVED: %d, %d, %s", proto->T, proto->Len, proto->Data);
+	click_chatter("RECEIVED: %d, %d, %s", proto->T, proto->Len, s);
 	String res = _msgs.get(s);
 
 	if (!res) {
