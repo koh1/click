@@ -15,8 +15,8 @@
 
 #define DDBPROTO_REQUEST 0
 #define DDBPROTO_ANSWER 1
-#define DDBPROTO_CACHE_REQUEST 2
-#define DDBPROTO_CACHE_ANSWER 3
+//#define DDBPROTO_CACHE_REQUEST 2
+//#define DDBPROTO_CACHE_ANSWER 3
 
 #define DDB_CLASSIFY_ANNO_OFFSET 4
 
@@ -27,11 +27,11 @@
 
 struct DDBProto {
 #if CLICK_BYTE_ORDER == CLICK_BIG_ENDIAN
-	unsigned int T : 3;
-	unsigned int Len : 10;
+	unsigned int T : 1;
+	unsigned int Len : 7;
 #elif CLICK_BYTE_ORDER == CLICK_LITTLE_ENDIAN
-	unsigned int Len : 10;
-	unsigned int T : 3;
+	unsigned int Len : 7;
+	unsigned int T : 1;
 #else
 #error "Undefined Byte Order!"
 #endif

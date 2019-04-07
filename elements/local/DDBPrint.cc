@@ -19,12 +19,6 @@ Packet *DDBPrint::simple_action(Packet *p) {
 	} else if (proto->T == DDBPROTO_ANSWER) {
 		click_chatter("Answer: %s", String(proto->Data, DDBPROTO_DATA_LEN).c_str());
 		anno_val = (uint8_t) DDBPROTO_ANSWER;
-	} else if (proto->T == DDBPROTO_CACHE_REQUEST) {
-		click_chatter("Cache Request: %s", String(proto->Data,DDBPROTO_DATA_LEN).c_str());
-		anno_val = (uint8_t) DDBPROTO_CACHE_REQUEST;
-	} else if (proto->T == DDBPROTO_CACHE_ANSWER) {
-		click_chatter("Cache Answer: %s", String(proto->Data,DDBPROTO_DATA_LEN).c_str());
-		anno_val = (uint8_t) DDBPROTO_CACHE_ANSWER;
 	} else {
 		click_chatter("ERROR: unknown type for packet");
 	}
