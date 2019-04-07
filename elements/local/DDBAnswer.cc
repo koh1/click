@@ -19,10 +19,10 @@ Packet *DDBAnswer::simple_action(Packet *p) {
 	//p->pull(28);
 
 	struct DDBProto *proto = (struct DDBProto*)p->data();
-	String s = String(proto->Data, strnlen(proto->Data, DDBPROTO_DATA_LEN)).c_str();
+	String s = String(proto->Data, strnlen(proto->Data, DDBPROTO_DATA_LEN));
 	click_chatter("RECEIVED: %d, %d, %s", proto->T, proto->Len, s);
 	//String res = _msgs.get(s);
-	String res = _msgs.get(s);
+	String res = _msgs.get(s.printable().c_str());
 
 	if (!res) {
 		click_chatter("DEBUG: No response for %s", s.printable().c_str());
