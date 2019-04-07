@@ -53,9 +53,6 @@ arpt :: Tee(6);
 //c0[2] -> Paint(1) -> ip;
 //c0[3] -> Print("enp0s3 non-IP") -> Discard;
 
-udpip_cl :: IPClassifier(dst udp port 33333, -)
-ddb_cl :: DDBClassifier;
-
 // Input and output paths for enp0s8
 c1 :: Classifier(12/0806 20/0001, 12/0806 20/0002, 12/0800, -);
 FromDevice(enp0s8) -> c1;
@@ -66,10 +63,10 @@ c1[1] -> arpt;
 arpt[1] -> [1]arpq1;
 //c1[2] -> Paint(2) -> ip;
 c1[2] 
-	-> udpip_cl
+	-> udpip_cl1 :: IPClassifier(dst udp port 33333, -)
 	-> Strip(42)
 	-> DDBPrint
-	-> ddb_cl
+	-> ddb_cl1 :: DDBClassifier
 	-> DDBAnswer
 	-> DDBPrint
 	-> Discard;
@@ -85,10 +82,10 @@ c2[1] -> arpt;
 arpt[2] -> [1]arpq2;
 //c2[2] -> Paint(3) -> ip;
 c2[2] 
-	-> udpip_cl
+	-> udpip_cl2 :: IPClassifier(dst udp port 33333, -)
 	-> Strip(42)
 	-> DDBPrint
-	-> ddb_cl
+	-> ddb_cl2 :: DDBClassifier
 	-> DDBAnswer
 	-> DDBPrint
 	-> Discard;
@@ -104,10 +101,10 @@ c3[1] -> arpt;
 arpt[3] -> [1]arpq3;
 //c3[2] -> Paint(4) -> ip;
 c3[2] 
-	-> udpip_cl
+	-> udpip_cl3 :: IPClassifier(dst udp port 33333, -)
 	-> Strip(42)
 	-> DDBPrint
-	-> ddb_cl
+	-> ddb_cl3 :: DDBClassifier
 	-> DDBAnswer
 	-> DDBPrint
 	-> Discard;
@@ -123,19 +120,36 @@ c4[1] -> arpt;
 arpt[4] -> [1]arpq4;
 //c4[2] -> Paint(5) -> ip;
 c4[2] 
-	-> udpip_cl
+	-> udpip_cl4 :: IPClassifier(dst udp port 33333, -)
 	-> Strip(42)
 	-> DDBPrint
-	-> ddb_cl
+	-> ddb_cl4 :: DDBClassifier
 	-> DDBAnswer
 	-> DDBPrint
 	-> Discard;
 c4[3] -> Print("enp0s16 non-IP") -> Discard;
 
-ddb_cl[1] -> DDBLog;
-ddb_cl[2] -> DDBLog;
-ddb_cl[3] -> DDBLog;
-ddb_cl[4] -> Discard;
+udpip_cl1[1] -> ip;
+udpip_cl2[1] -> ip;
+udpip_cl3[1] -> ip;
+udpip_cl4[1] -> ip;
+
+ddb_cl1[1] -> DDBLog;
+ddb_cl2[1] -> DDBLog;
+ddb_cl3[1] -> DDBLog;
+ddb_cl4[1] -> DDBLog;
+ddb_cl1[2] -> DDBLog;
+ddb_cl2[2] -> DDBLog;
+ddb_cl3[2] -> DDBLog;
+ddb_cl4[2] -> DDBLog;
+ddb_cl1[3] -> DDBLog;
+ddb_cl2[3] -> DDBLog;
+ddb_cl3[3] -> DDBLog;
+ddb_cl4[3] -> DDBLog;
+ddb_cl1[4] -> Discard;
+ddb_cl2[4] -> Discard;
+ddb_cl3[4] -> Discard;
+ddb_cl4[4] -> Discard;
 
 // Local delivery
 toh :: Print(toh) -> Discard;
@@ -143,17 +157,17 @@ arpt[5] -> toh;
 rt[0] -> EtherEncap(0x0800, 1:1:1:1:1:1, 2:2:2:2:2:2) -> toh;
 
 // Forwarding path for enp0s3
-//rt[1] -> DropBroadcasts
-//    -> cp0 :: PaintTee(1)
-//    -> gio0 :: IPGWOptions(10.0.2.15)
-//    -> FixIPSrc(10.0.2.15)
-//    -> dt0 :: DecIPTTL
-//    -> fr0 :: IPFragmenter(1500)
-//    -> [0]arpq0;
-//dt0[1] -> ICMPError(10.0.2.15, timeexceeded) -> rt;
-//fr0[1] -> ICMPError(10.0.2.15, unreachable, needfrag) -> rt;
-//gio0[1] -> ICMPError(10.0.2.15, parameterproblem) -> rt;
-//cp0[1] -> ICMPError(10.0.2.15, redirect, host) -> rt;
+rt[1] -> DropBroadcasts
+    -> cp0 :: PaintTee(1)
+    -> gio0 :: IPGWOptions(10.0.2.15)
+    -> FixIPSrc(10.0.2.15)
+    -> dt0 :: DecIPTTL
+    -> fr0 :: IPFragmenter(1500)
+    -> [0]arpq0;
+dt0[1] -> ICMPError(10.0.2.15, timeexceeded) -> rt;
+fr0[1] -> ICMPError(10.0.2.15, unreachable, needfrag) -> rt;
+gio0[1] -> ICMPError(10.0.2.15, parameterproblem) -> rt;
+cp0[1] -> ICMPError(10.0.2.15, redirect, host) -> rt;
 
 // Forwarding path for enp0s8
 rt[2] -> DropBroadcasts
