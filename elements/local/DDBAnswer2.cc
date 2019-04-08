@@ -9,7 +9,7 @@ CLICK_DECLS
 DDBAnswer::DDBAnswer() { };
 DDBAnswer::~DDBAnswer() { };
 
-void DDBAnswer::push(int, Packet *p) {
+Packet *DDBAnswer::simple_action(Packet *p) {
 	const click_ip *iph_in = p->ip_header();
 	struct in_addr dst = iph_in->ip_dst;
 	struct in_addr src = iph_in->ip_src;
@@ -26,12 +26,11 @@ void DDBAnswer::push(int, Packet *p) {
 	click_chatter("RECEIVED: %d, %d, %s", proto->T, proto->Len, s.printable().c_str());
 	//String res = _msgs.get(s);
 	String res = _msgs.get(s);
-	output(0).push(p);
+
 	if (!res) {
 		click_chatter("DEBUG: No response for %s", s.printable().c_str());
-		output(1).push(p);
-		//p->kill();
-		//return NULL;
+		p->kill();
+		return NULL;
 	}
 
 	int res_len = res.length();
@@ -44,7 +43,7 @@ void DDBAnswer::push(int, Packet *p) {
 	WritablePacket *q = Packet::make(headroom, &resp, sizeof(DDBProto), 0);
 	p->kill();
 
-	output(0).push(q);
+	return q;
 };
 
 enum { H_MAP };

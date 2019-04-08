@@ -33,10 +33,10 @@ class DDBAnswer : public Element {
 		~DDBAnswer();
 
 		const char *class_name() const { return "DDBAnswer"; }
-		const char *port_count() const { return "1/2"; }
-		const char *processing() const { return PUSH; }
+		const char *port_count() const { return "1/1"; }
+		const char *processing() const { return AGNOSTIC; }
 
-		void push(int, Packet *p);
+		Packet *simple_action(Packet *p);
 		void add_handlers();
 };
 
