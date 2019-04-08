@@ -55,12 +55,12 @@ void DDBAnswer::push(int, Packet *p) {
 
 	ip->ip_v = 4;
 	ip->ip_hl = sizeof(click_ip) >> 2;
-	ip->ip_len = htons(p->length());
+	ip->ip_len = htons(q->length());
 	ip->ip_id = htons(_id.fetch_and_add(1));
 	ip->ip_p = IP_PROTO_UDP;
 	ip->ip_src = dst;
 	ip->ip_dst = src;
-	p->set_dst_ip_anno(IPAddress(src));
+
 	ip->ip_tos = 0;
 	ip->ip_off = 0;
 	ip->ip_ttl = 250;
@@ -69,14 +69,13 @@ void DDBAnswer::push(int, Packet *p) {
 	ip->ip_sum = click_in_cksum((unsigned char *)ip, sizeof(click_ip));
 
 
-	p->set_ip_header(ip, sizeof(click_ip));
+	q->set_ip_header(ip, sizeof(click_ip));
 
 	// set up UDP header
 	udp->uh_sport = dport;
 	udp->uh_dport = sport;
-	uint16_t len = p->length() - sizeof(click_ip);
+	uint16_t len = q->length() - sizeof(click_ip);
 	udp->uh_ulen = htons(len);
-	udp->uh_sum = 0;
 	udp->uh_sum = 0;
 	unsigned csum = click_in_cksum((unsigned char *)udp, len);
 	udp->uh_sum = click_in_cksum_pseudohdr(csum, ip, len);

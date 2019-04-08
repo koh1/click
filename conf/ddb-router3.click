@@ -189,6 +189,7 @@ rt[3] -> DropBroadcasts
     -> gio2 :: IPGWOptions(172.16.102.11)
     -> dt2 :: DecIPTTL
     -> fr2 :: IPFragmenter(1400)
+    -> IPPrint(RT3)
     -> [0]arpq2;
 dt2[1] -> ICMPError(172.16.102.11, timeexceeded) -> [0]rt;
 fr2[1] -> ICMPError(172.16.102.11, unreachable, needfrag) -> [0]rt;
@@ -199,6 +200,7 @@ rt[4] -> DropBroadcasts
     -> gio3 :: IPGWOptions(172.16.103.11)
     -> dt3 :: DecIPTTL
     -> fr3 :: IPFragmenter(1400)
+    -> IPPrint(RT4)
     -> [0]arpq3;
 dt3[1] -> ICMPError(172.16.103.11, timeexceeded) -> [0]rt;
 fr3[1] -> ICMPError(172.16.103.11, unreachable, needfrag) -> [0]rt;
@@ -209,6 +211,7 @@ rt[5] -> DropBroadcasts
     -> gio4 :: IPGWOptions(172.16.108.11)
     -> dt4 :: DecIPTTL
     -> fr4 :: IPFragmenter(1400)
+    -> IPPrint(RT5)
     -> [0]arpq4;
 dt4[1] -> ICMPError(172.16.108.11, timeexceeded) -> [0]rt;
 fr4[1] -> ICMPError(172.16.108.11, unreachable, needfrag) -> [0]rt;
