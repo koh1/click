@@ -54,7 +54,7 @@ enum { H_MAP2 };
 int DDBAnswer2::write_callback(const String &s, Element *e, void *vparam, ErrorHandler *errh) {
 	DDBAnswer2 *da = static_cast<DDBAnswer2 *>(e);
 
-	if ((intptr_t)vparam != H_MAP)
+	if ((intptr_t)vparam != H_MAP2)
 		return 0;
 
 	if (s.length() > DDBPROTO_DATA_LEN*2 + 1)
@@ -78,7 +78,7 @@ int DDBAnswer2::write_callback(const String &s, Element *e, void *vparam, ErrorH
 
 String DDBAnswer2::read_callback(Element *e, void *vparam) {
 	DDBAnswer2 *da = static_cast<DDBAnswer2 *>(e);
-	if ((intptr_t)vparam != H_MAP)
+	if ((intptr_t)vparam != H_MAP2)
 		return "";
 
 	String res("");
