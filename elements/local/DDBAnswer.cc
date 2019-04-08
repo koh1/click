@@ -29,12 +29,9 @@ void DDBAnswer::push(int, Packet *p) {
 	click_chatter("RECEIVED: %d, %d, %s", proto->T, proto->Len, s.printable().c_str());
 	//String res = _msgs.get(s);
 	String res = _msgs.get(s);
-	output(0).push(p);
 	if (!res) {
 		click_chatter("DEBUG: No response for %s", s.printable().c_str());
 		output(1).push(p);
-		//p->kill();
-		//return NULL;
 	}
 
 	int res_len = res.length();
