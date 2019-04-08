@@ -1,5 +1,9 @@
 #include <click/config.h>
 #include <click/args.hh>
+#include <clicknet/udp.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include "DDBAnswer.hh"
 #include "ddbprotocol.hh"
 
@@ -9,14 +13,18 @@ DDBAnswer::DDBAnswer() { };
 DDBAnswer::~DDBAnswer() { };
 
 Packet *DDBAnswer::simple_action(Packet *p) {
-	p->push(28);
-	//const click_ip *iph_in = p->ip_header();
-	//struct in_addr dst = iph_in->ip_dst;
-	//struct in_addr src = iph_in->ip_src;
-	// get 4 tuples
-	//click_chatter("DEBUG: packet %s -> %s received", src, dst);
 
-	p->pull(28);
+	const click_ip *iph_in = p->ip_header();
+	struct in_addr dst = iph_in->ip_dst;
+	struct in_addr src = iph_in->ip_src;
+	// get 4 tuples
+	click_chatter("DEBUG: source ip: %s", inet_ntoa(src));
+	click_chatter("DEBUG: destination ip: %s", inet_ntoa(dst));
+
+	const click_udp *udp_in = p->udp_header();
+	click_chatter("DEBUG: source Port: %u", ntohs(udp_in->uh_sport));
+	click_chatter("DEBUG: destination Port: %u", ntohs(udp_in->uh_dport));
+
 
 	struct DDBProto *proto = (struct DDBProto*)p->data();
 	String s = String(proto->Data, strnlen(proto->Data, DDBPROTO_DATA_LEN));
