@@ -69,6 +69,7 @@ c1[2]
 	-> ddb_cl1 :: DDBClassifier
 	-> ddb_ans1 :: DDBAnswer
 	-> DDBPrint
+	-> IPPrint(HIT08)	
 	-> Discard;
 c1[3] -> Print("enp0s8 non-IP") -> Discard;
 
@@ -89,6 +90,7 @@ c2[2]
 	-> ddb_cl2 :: DDBClassifier
 	-> ddb_ans2 :: DDBAnswer
 	-> DDBPrint
+	-> IPPrint(HIT09)	
 	-> Discard;
 c2[3] -> Print("enp0s9 non-IP") -> Discard;
 
@@ -109,6 +111,7 @@ c3[2]
 	-> ddb_cl3 :: DDBClassifier
 	-> ddb_ans3 :: DDBAnswer
 	-> DDBPrint
+	-> IPPrint(HIT10)
 	-> Discard;
 c3[3] -> Print("enp0s10 non-IP") -> Discard;
 
@@ -129,6 +132,7 @@ c4[2]
 	-> ddb_cl4 :: DDBClassifier
 	-> ddb_ans4 :: DDBAnswer
 	-> DDBPrint
+	-> IPPrint(HIT16)	
 	-> Discard;
 c4[3] -> Print("enp0s16 non-IP") -> Discard;
 
@@ -178,6 +182,7 @@ rt[2] -> DropBroadcasts
     -> gio1 :: IPGWOptions(172.16.101.11)
     -> dt1 :: DecIPTTL
     -> fr1 :: IPFragmenter(1400)
+    -> IPPrint(RT2)
     -> [0]arpq1;
 dt1[1] -> ICMPError(172.16.101.11, timeexceeded) -> [0]rt;
 fr1[1] -> ICMPError(172.16.101.11, unreachable, needfrag) -> [0]rt;
