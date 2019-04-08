@@ -29,12 +29,11 @@ void DDBAnswer::push(int, Packet *p) {
 	click_chatter("RECEIVED: %d, %d, %s", proto->T, proto->Len, s.printable().c_str());
 	//String res = _msgs.get(s);
 	String res = _msgs.get(s);
-	output(0).push(p);
 	if (!res) {
 		click_chatter("DEBUG: No response for %s", s.printable().c_str());
+		p->push(28);
 		output(1).push(p);
-		//p->kill();
-		//return NULL;
+		return;
 	}
 
 	int res_len = res.length();
@@ -45,9 +44,13 @@ void DDBAnswer::push(int, Packet *p) {
 	resp.Len = DDBPROTO_LEN_B;
 	memcpy(resp.Data, res.c_str(), DDBPROTO_DATA_LEN);
 	WritablePacket *q = Packet::make(headroom, &resp, sizeof(DDBProto), 0);
-	p->kill();
+	q->push(sizeof(click_udp) + sizeof(click_ip));
+	click_ip *ip = reinterpret_cat<click_ip *>(q->data());
+	click_udp *udp = reinterpret_cast<click_udp *>(ip + 1);
 
+	p->kill();
 	output(0).push(q);
+	return;
 };
 
 enum { H_MAP };
