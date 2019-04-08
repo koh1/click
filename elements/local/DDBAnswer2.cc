@@ -49,7 +49,7 @@ Packet *DDBAnswer2::simple_action(Packet *p) {
 	return q;
 };
 
-enum { H_MAP };
+enum { H_MAP2 };
 
 int DDBAnswer2::write_callback(const String &s, Element *e, void *vparam, ErrorHandler *errh) {
 	DDBAnswer2 *da = static_cast<DDBAnswer2 *>(e);
@@ -96,8 +96,8 @@ String DDBAnswer2::read_callback(Element *e, void *vparam) {
 }
 
 void DDBAnswer2::add_handlers() {
-	add_read_handler("h_map", read_callback, H_MAP, Handler::CALM);
-	add_write_handler("h_map", write_callback, H_MAP);
+	add_read_handler("h_map2", read_callback, H_MAP2, Handler::CALM);
+	add_write_handler("h_map2", write_callback, H_MAP2);
 }
 
 CLICK_ENDDECLS
