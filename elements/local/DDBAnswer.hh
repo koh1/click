@@ -38,6 +38,10 @@ class DDBAnswer : public Element {
 
 		void push(int, Packet *p);
 		void add_handlers();
+	private:
+	    atomic_uint32_t _id;
+
+
 };
 
 CLICK_ENDDECLS
