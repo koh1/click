@@ -1,6 +1,9 @@
 #include <click/config.h>
 #include <click/args.hh>
 #include <clicknet/udp.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include "DDBAnswer2.hh"
 #include "ddbprotocol.hh"
 

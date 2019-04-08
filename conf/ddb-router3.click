@@ -67,7 +67,7 @@ c1[2]
 	-> Strip(28)
 	-> DDBPrint
 	-> ddb_cl1 :: DDBClassifier
-	-> DDBAnswer
+	-> ddb_ans1 :: DDBAnswer
 	-> DDBPrint
 	-> Discard;
 c1[3] -> Print("enp0s8 non-IP") -> Discard;
@@ -83,11 +83,11 @@ c2[1] -> [1]arpq2;
 c2[2]
 	-> Strip(14)
 	-> CheckIPHeader()
-	-> udpip_cl2 :: IPClassifier(dst udp port 33333, -)
+	-> udpip_cl2 :: IPClassifier(dst udp port 33333, dst udp port 33332, -)
 	-> Strip(28)
 	-> DDBPrint
 	-> ddb_cl2 :: DDBClassifier
-	-> DDBAnswer
+	-> ddb_ans2 :: DDBAnswer
 	-> DDBPrint
 	-> Discard;
 c2[3] -> Print("enp0s9 non-IP") -> Discard;
@@ -107,7 +107,7 @@ c3[2]
 	-> Strip(28)
 	-> DDBPrint
 	-> ddb_cl3 :: DDBClassifier
-	-> DDBAnswer
+	-> ddb_ans3 :: DDBAnswer
 	-> DDBPrint
 	-> Discard;
 c3[3] -> Print("enp0s10 non-IP") -> Discard;
@@ -127,13 +127,19 @@ c4[2]
 	-> Strip(28)
 	-> DDBPrint
 	-> ddb_cl4 :: DDBClassifier
-	-> DDBAnswer
+	-> ddb_ans4 :: DDBAnswer
 	-> DDBPrint
 	-> Discard;
 c4[3] -> Print("enp0s16 non-IP") -> Discard;
 
 udpip_cl1[1] -> IPPrint(IP1) -> [0]rt;
-udpip_cl2[1] -> IPPrint(IP2) -> [0]rt;
+udpip_cl2[1]
+	-> Strip(28)
+	-> DDBPrint
+	-> DDBRequest
+	-> DDBPrint
+	-> Discard;
+udpip_cl2[2] -> IPPrint(IP2) -> [0]rt;
 udpip_cl3[1] -> IPPrint(IP3) -> [0]rt;
 udpip_cl4[1] -> IPPrint(IP4) -> [0]rt;
 
@@ -141,6 +147,11 @@ ddb_cl1[1] -> DDBLog; ddb_cl2[1] -> DDBLog; ddb_cl3[1] -> DDBLog; ddb_cl4[1] -> 
 ddb_cl1[2] -> DDBLog; ddb_cl2[2] -> DDBLog; ddb_cl3[2] -> DDBLog; ddb_cl4[2] -> DDBLog;
 ddb_cl1[3] -> DDBLog; ddb_cl2[3] -> DDBLog; ddb_cl3[3] -> DDBLog; ddb_cl4[3] -> DDBLog;
 ddb_cl1[4] -> Discard; ddb_cl2[4] -> Discard; ddb_cl3[4] -> Discard; ddb_cl4[4] -> Discard;
+
+ddb_ans1[1] -> IPPrint(MISHIT1) -> [0]rt;
+ddb_ans2[1] -> IPPrint(MISHIT2) -> [0]rt;
+ddb_ans3[1] -> IPPrint(MISHIT3) -> [0]rt;
+ddb_ans4[1] -> IPPrint(MISHIT4) -> [0]rt;
 
 // Local delivery
 toh :: Print(toh) -> Discard;
