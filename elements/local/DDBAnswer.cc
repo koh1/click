@@ -9,18 +9,23 @@
 
 CLICK_DECLS
 
-DDBAnswer::DDBAnswer() { };
+DDBAnswer::DDBAnswer() {
+	_id = 0;
+};
 DDBAnswer::~DDBAnswer() { };
 
 void DDBAnswer::push(int, Packet *p) {
 	const click_ip *iph_in = p->ip_header();
 	struct in_addr dst = iph_in->ip_dst;
 	struct in_addr src = iph_in->ip_src;
+	uint16_t ipid = iph_in->ip_id;
 	// get 4 tuples
 	click_chatter("DEBUG: source IP: %s", inet_ntoa(src));
 	click_chatter("DEBUG: destination IP: %s", inet_ntoa(dst));
 
 	const click_udp *udp_in = p->udp_header();
+	uint16_t sport = udp_in->uh_sport;
+	uint16_t dport = udp_in->uh_dport;
 	click_chatter("DEBUG: source Port: %u", ntohs(udp_in->uh_sport));
 	click_chatter("DEBUG: destination Port: %u", ntohs(udp_in->uh_dport));
 
@@ -31,7 +36,9 @@ void DDBAnswer::push(int, Packet *p) {
 	String res = _msgs.get(s);
 	if (!res) {
 		click_chatter("DEBUG: No response for %s", s.printable().c_str());
+		p->push(28);
 		output(1).push(p);
+		return;
 	}
 
 	int res_len = res.length();
@@ -42,9 +49,41 @@ void DDBAnswer::push(int, Packet *p) {
 	resp.Len = DDBPROTO_LEN_B;
 	memcpy(resp.Data, res.c_str(), DDBPROTO_DATA_LEN);
 	WritablePacket *q = Packet::make(headroom, &resp, sizeof(DDBProto), 0);
-	p->kill();
+	q->push(sizeof(click_udp) + sizeof(click_ip));
+	click_ip *ip = reinterpret_cast<click_ip *>(q->data());
+	click_udp *udp = reinterpret_cast<click_udp *>(ip + 1);
 
+	ip->ip_v = 4;
+	ip->ip_hl = sizeof(click_ip) >> 2;
+	ip->ip_len = htons(p->length());
+	ip->ip_id = htons(_id.fetch_and_add(1));
+	ip->ip_p = IP_PROTO_UDP;
+	ip->ip_src = dst;
+	ip->ip_dst = src;
+	p->set_dst_ip_anno(IPAddress(src));
+	ip->ip_tos = 0;
+	ip->ip_off = 0;
+	ip->ip_ttl = 250;
+
+	ip->ip_sum = 0;
+	ip->ip_sum = click_in_cksum((unsigned char *)ip, sizeof(click_ip));
+
+
+	p->set_ip_header(ip, sizeof(click_ip));
+
+	// set up UDP header
+	udp->uh_sport = dport;
+	udp->uh_dport = sport;
+	uint16_t len = p->length() - sizeof(click_ip);
+	udp->uh_ulen = htons(len);
+	udp->uh_sum = 0;
+	udp->uh_sum = 0;
+	unsigned csum = click_in_cksum((unsigned char *)udp, len);
+	udp->uh_sum = click_in_cksum_pseudohdr(csum, ip, len);
+
+	p->kill();
 	output(0).push(q);
+	return;
 };
 
 enum { H_MAP };
