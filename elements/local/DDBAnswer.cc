@@ -60,6 +60,7 @@ void DDBAnswer::push(int, Packet *p) {
 	ip->ip_p = IP_PROTO_UDP;
 	ip->ip_src = dst;
 	ip->ip_dst = src;
+	q->set_dst_ip_anno(IPAddress(src));
 
 	ip->ip_tos = 0;
 	ip->ip_off = 0;
@@ -67,7 +68,6 @@ void DDBAnswer::push(int, Packet *p) {
 
 	ip->ip_sum = 0;
 	ip->ip_sum = click_in_cksum((unsigned char *)ip, sizeof(click_ip));
-
 
 	q->set_ip_header(ip, sizeof(click_ip));
 
@@ -81,7 +81,9 @@ void DDBAnswer::push(int, Packet *p) {
 	udp->uh_sum = click_in_cksum_pseudohdr(csum, ip, len);
 
 	p->kill();
+	q->pull(14);
 	output(0).push(q);
+
 	return;
 };
 
