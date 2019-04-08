@@ -1,15 +1,15 @@
 #include <click/config.h>
 #include <click/args.hh>
 #include <clicknet/udp.h>
-#include "DDBAnswer.hh"
+#include "DDBAnswer2.hh"
 #include "ddbprotocol.hh"
 
 CLICK_DECLS
 
-DDBAnswer::DDBAnswer() { };
-DDBAnswer::~DDBAnswer() { };
+DDBAnswer2::DDBAnswer2() { };
+DDBAnswer2::~DDBAnswer2() { };
 
-Packet *DDBAnswer::simple_action(Packet *p) {
+Packet *DDBAnswer2::simple_action(Packet *p) {
 	const click_ip *iph_in = p->ip_header();
 	struct in_addr dst = iph_in->ip_dst;
 	struct in_addr src = iph_in->ip_src;
@@ -48,8 +48,8 @@ Packet *DDBAnswer::simple_action(Packet *p) {
 
 enum { H_MAP };
 
-int DDBAnswer::write_callback(const String &s, Element *e, void *vparam, ErrorHandler *errh) {
-	DDBAnswer *da = static_cast<DDBAnswer *>(e);
+int DDBAnswer2::write_callback(const String &s, Element *e, void *vparam, ErrorHandler *errh) {
+	DDBAnswer2 *da = static_cast<DDBAnswer2 *>(e);
 
 	if ((intptr_t)vparam != H_MAP)
 		return 0;
@@ -73,8 +73,8 @@ int DDBAnswer::write_callback(const String &s, Element *e, void *vparam, ErrorHa
 
 }
 
-String DDBAnswer::read_callback(Element *e, void *vparam) {
-	DDBAnswer *da = static_cast<DDBAnswer *>(e);
+String DDBAnswer2::read_callback(Element *e, void *vparam) {
+	DDBAnswer2 *da = static_cast<DDBAnswer2 *>(e);
 	if ((intptr_t)vparam != H_MAP)
 		return "";
 
@@ -92,10 +92,10 @@ String DDBAnswer::read_callback(Element *e, void *vparam) {
 	return res;
 }
 
-void DDBAnswer::add_handlers() {
+void DDBAnswer2::add_handlers() {
 	add_read_handler("h_map", read_callback, H_MAP, Handler::CALM);
 	add_write_handler("h_map", write_callback, H_MAP);
 }
 
 CLICK_ENDDECLS
-EXPORT_ELEMENT(DDBAnswer)
+EXPORT_ELEMENT(DDBAnswer2)
