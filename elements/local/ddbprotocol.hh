@@ -5,7 +5,7 @@
  *      Author: koh1
  * 0       7       15      23      31
  * +---+---+---+---+---+---+---+---+
- * |T |LEN      |DATA              |
+ * |T      |LEN    |DATA           |
  */
 
 #ifndef DDBPROTOCOL_HH_
@@ -15,8 +15,8 @@
 
 #define DDBPROTO_REQUEST 0
 #define DDBPROTO_ANSWER 1
-//#define DDBPROTO_CACHE_REQUEST 2
-//#define DDBPROTO_CACHE_ANSWER 3
+#define DDBPROTO_CACHE_REQUEST 2
+#define DDBPROTO_CACHE_ANSWER 3
 
 #define DDB_CLASSIFY_ANNO_OFFSET 4
 
@@ -27,11 +27,11 @@
 
 struct DDBProto {
 #if CLICK_BYTE_ORDER == CLICK_BIG_ENDIAN
-	unsigned int T : 1;
-	unsigned int Len : 7;
+	unsigned int T : 8;
+	unsigned int Len : 8;
 #elif CLICK_BYTE_ORDER == CLICK_LITTLE_ENDIAN
-	unsigned int Len : 7;
-	unsigned int T : 1;
+	unsigned int Len : 8;
+	unsigned int T : 8;
 #else
 #error "Undefined Byte Order!"
 #endif
