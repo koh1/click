@@ -13,10 +13,10 @@ Packet *DDBPrint::simple_action(Packet *p) {
 	struct DDBProto *proto = (DDBProto *) p->data();
 	uint8_t anno_val = DDBPROTO_ANSWER + 1;
 
-	if (proto->T == DDBPROTO_REQUEST) {
+	if (ntohs(proto->T) == DDBPROTO_REQUEST) {
 		click_chatter("Request: %s", String(proto->Data, DDBPROTO_DATA_LEN).c_str());
 		anno_val = (uint8_t) DDBPROTO_REQUEST;
-	} else if (proto->T == DDBPROTO_ANSWER) {
+	} else if (ntohs(proto->T) == DDBPROTO_ANSWER) {
 		click_chatter("Answer: %s", String(proto->Data, DDBPROTO_DATA_LEN).c_str());
 		anno_val = (uint8_t) DDBPROTO_ANSWER;
 	} else {
