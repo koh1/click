@@ -39,6 +39,7 @@ void DDBLog::run_timer(Timer *t) {
 }
 
 Packet *DDBLog::simple_action(Packet *p) {
+    p->pull(28);
 	struct DDBProto *proto = (struct DDBProto*) p->data();
 	String s;
 
