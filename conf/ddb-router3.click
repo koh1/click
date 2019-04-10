@@ -68,7 +68,6 @@ c1[2]
 	-> DDBPrint
 	-> ddb_cl1 :: DDBClassifier
 	-> ddb_ans1 :: DDBAnswer
-	-> DDBLog
 	-> IPPrint(RESP08)	
 	-> [0]rt;
 c1[3] -> Print("enp0s8 non-IP") -> Discard;
@@ -90,7 +89,6 @@ c2[2]
 	-> ddb_cl2 :: DDBClassifier
 	-> ddb_ans2 :: DDBAnswer
 	-> IPPrint(RESP09)
-	-> DDBLog
 	-> [0]rt;
 c2[3] -> Print("enp0s9 non-IP") -> Discard;
 
@@ -110,7 +108,6 @@ c3[2]
 	-> DDBPrint
 	-> ddb_cl3 :: DDBClassifier
 	-> ddb_ans3 :: DDBAnswer
-	-> DDBLog
 	-> IPPrint(RESP10)
 	-> [0]rt;
 c3[3] -> Print("enp0s10 non-IP") -> Discard;
@@ -131,7 +128,6 @@ c4[2]
 	-> DDBPrint
 	-> ddb_cl4 :: DDBClassifier
 	-> ddb_ans4 :: DDBAnswer
-	-> DDBLog
 	-> IPPrint(RESP16)
 	-> [0]rt;
 c4[3] -> Print("enp0s16 non-IP") -> Discard;
