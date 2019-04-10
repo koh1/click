@@ -20,7 +20,7 @@
 
 #define DDB_CLASSIFY_ANNO_OFFSET 4
 
-#define DDBPROTO_DATA_LEN 256
+#define DDBPROTO_DATA_LEN 255
 
 #define DDBPROTO_LEN_A 1 << 0
 #define DDBPROTO_LEN_B 1 << 1
