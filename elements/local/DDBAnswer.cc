@@ -47,6 +47,7 @@ void DDBAnswer::push(int, Packet *p) {
 	struct DDBProto resp;
 	resp.T = DDBPROTO_ANSWER;
 	resp.Len = DDBPROTO_DATA_LEN;
+	click_chatter("DEBUG: response.T=%u, response.Len=%u, response.Data=%s", resp.T, resp.Len, resp.Data);
 	memcpy(resp.Data, res.c_str(), DDBPROTO_DATA_LEN);
 	WritablePacket *q = Packet::make(headroom, &resp, sizeof(DDBProto), 0);
 	q->push(sizeof(click_udp) + sizeof(click_ip));
