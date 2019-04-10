@@ -20,7 +20,7 @@ Packet *DDBPrint::simple_action(Packet *p) {
 		click_chatter("Answer: %s", String(proto->Data, DDBPROTO_DATA_LEN).c_str());
 		anno_val = (uint8_t) DDBPROTO_ANSWER;
 	} else {
-		click_chatter("ERROR: unknown type for packet, proto-T: %u", proto->T);
+	  click_chatter("ERROR: unknown type for packet, proto-T: %u", proto->T);
 	}
 
 	p->set_anno_u8(DDB_CLASSIFY_ANNO_OFFSET, anno_val);
