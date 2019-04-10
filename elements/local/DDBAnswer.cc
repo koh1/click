@@ -82,7 +82,7 @@ void DDBAnswer::push(int, Packet *p) {
 	udp->uh_sum = click_in_cksum_pseudohdr(csum, ip, len);
 
 	p->kill();
-	q->pull(14);
+	//q->pull(14);
 	output(0).push(q);
 
 	return;
