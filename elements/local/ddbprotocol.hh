@@ -20,21 +20,21 @@
 
 #define DDB_CLASSIFY_ANNO_OFFSET 4
 
-#define DDBPROTO_DATA_LEN 255
+#define DDBPROTO_DATA_LEN 256
 
 #define DDBPROTO_LEN_A 1 << 0
 #define DDBPROTO_LEN_B 1 << 1
 
 struct DDBProto {
-#if CLICK_BYTE_ORDER == CLICK_BIG_ENDIAN
+//#if CLICK_BYTE_ORDER == CLICK_BIG_ENDIAN
 	unsigned int T : 8;
 	unsigned int Len : 8;
-#elif CLICK_BYTE_ORDER == CLICK_LITTLE_ENDIAN
-	unsigned int Len : 8;
-	unsigned int T : 8;
-#else
-#error "Undefined Byte Order!"
-#endif
+//#elif CLICK_BYTE_ORDER == CLICK_LITTLE_ENDIAN
+//	unsigned int Len : 8;
+//	unsigned int T : 8;
+//#else
+//#error "Undefined Byte Order!"
+//#endif
 	char Data[DDBPROTO_DATA_LEN];
 } CLICK_SIZE_PACKED_ATTRIBUTE;
 
