@@ -20,11 +20,7 @@ Packet *DDBPrint::simple_action(Packet *p) {
 		click_chatter("Answer: %s", String(proto->Data, DDBPROTO_DATA_LEN).c_str());
 		anno_val = (uint8_t) DDBPROTO_ANSWER;
 	} else {
-<<<<<<< HEAD
-	  click_chatter("ERROR: unknown type for packet, proto-T: %u", proto->T);
-=======
-		click_chatter("ERROR: unknown type for packet, T: %u, Len: %u, Data: %u", proto->T, proto->Len, proto->Data);
->>>>>>> d9e105f53396edee9b8d0e2e9e8c9c25f919eb22
+		click_chatter("ERROR: unknown type for packet, T: %u, Len: %u, Data: %s", proto->T, proto->Len, proto->Data);
 	}
 
 	p->set_anno_u8(DDB_CLASSIFY_ANNO_OFFSET, anno_val);
