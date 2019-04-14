@@ -19,6 +19,9 @@ Packet *DDBPrint::simple_action(Packet *p) {
 	} else if (proto->T == DDBPROTO_ANSWER) {
 		click_chatter("Answer: %s", String(proto->Data, DDBPROTO_DATA_LEN).c_str());
 		anno_val = (uint8_t) DDBPROTO_ANSWER;
+	} else if (proto->T == DDBPROTO_ANSWER_NOT_FOUND) {
+		click_chatter("Answer Not Found: %s", String(proto->Data, DDBPROTO_DATA_LEN).c_str());
+		anno_val = (uint8_t) DDBPROTO_ANSWER_NOT_FOUND;	  
 	} else {
 		click_chatter("ERROR: unknown type for packet, T: %u, Len: %u, Data: %s", proto->T, proto->Len, proto->Data);
 	}

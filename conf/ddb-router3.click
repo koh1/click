@@ -71,7 +71,7 @@ c1[2]
 	-> Strip(28)
 	-> DDBPrint
 	-> Unstrip(28)
-	-> IPPrint(RESP08)
+//	-> IPPrint(RESP08)
 	-> [0]rt;
 c1[3] -> Print("enp0s8 non-IP") -> Discard;
 
@@ -86,7 +86,7 @@ c2[1] -> [1]arpq2;
 c2[2]
 	-> Strip(14)
 	-> CheckIPHeader()
-	-> udpip_cl2 :: IPClassifier(dst udp port 33333, dst udp port 33332, -)
+	-> udpip_cl2 :: IPClassifier(dst udp port 33333, -)
 	-> Strip(28)
 	-> DDBPrint
 	-> ddb_cl2 :: DDBClassifier
@@ -94,7 +94,7 @@ c2[2]
 	-> Strip(28)
 	-> DDBPrint
 	-> Unstrip(28)
-	-> IPPrint(RESP09)
+//	-> IPPrint(RESP09)
 	-> [0]rt;
 c2[3] -> Print("enp0s9 non-IP") -> Discard;
 
@@ -117,7 +117,7 @@ c3[2]
 	-> Strip(28)
 	-> DDBPrint
 	-> Unstrip(28)
-	-> IPPrint(RESP10)
+//	-> IPPrint(RESP10)
 	-> [0]rt;
 c3[3] -> Print("enp0s10 non-IP") -> Discard;
 
@@ -140,22 +140,33 @@ c4[2]
 	-> Strip(28)
 	-> DDBPrint
 	-> Unstrip(28)
-	-> IPPrint(RESP16)
+//	-> IPPrint(RESP16)
 	-> [0]rt;
 c4[3] -> Print("enp0s16 non-IP") -> Discard;
 
-udpip_cl1[1] -> IPPrint(IP1) -> [0]rt;
+udpip_cl1[1]
+//	-> IPPrint(IP1)
+	-> [0]rt;
+//udpip_cl2[1]
+//	-> Strip(28)
+//	-> DDBPrint
+//	-> DDBRequest
+//	-> DDBPrint
+//	-> Discard;
 udpip_cl2[1]
-	-> Strip(28)
-	-> DDBPrint
-	-> DDBRequest
-	-> DDBPrint
-	-> Discard;
-udpip_cl2[2] -> IPPrint(IP2) -> [0]rt;
-udpip_cl3[1] -> IPPrint(IP3) -> [0]rt;
-udpip_cl4[1] -> IPPrint(IP4) -> [0]rt;
+//	-> IPPrint(IP2)
+	-> [0]rt;
+udpip_cl3[1]
+//	-> IPPrint(IP3)
+	-> [0]rt;
+udpip_cl4[1]
+//	-> IPPrint(IP4)
+	-> [0]rt;
 
-ddb_cl1[1] -> DDBLog; ddb_cl2[1] -> DDBLog; ddb_cl3[1] -> DDBLog; ddb_cl4[1] -> DDBLog;
+ddb_cl1[1] -> Unstrip(28) -> [0]rt;
+ddb_cl2[1] -> Unstrip(28) -> [0]rt;
+ddb_cl3[1] -> Unstrip(28) -> [0]rt;
+ddb_cl4[1] -> Unstrip(28) -> [0]rt;
 ddb_cl1[2] -> DDBLog; ddb_cl2[2] -> DDBLog; ddb_cl3[2] -> DDBLog; ddb_cl4[2] -> DDBLog;
 ddb_cl1[3] -> DDBLog; ddb_cl2[3] -> DDBLog; ddb_cl3[3] -> DDBLog; ddb_cl4[3] -> DDBLog;
 ddb_cl1[4] -> Discard; ddb_cl2[4] -> Discard; ddb_cl3[4] -> Discard; ddb_cl4[4] -> Discard;
@@ -178,7 +189,7 @@ rt[1] -> Discard;
 //    -> gio0 :: IPGWOptions(10.0.2.15)
 //    -> FixIPSrc(10.0.2.15)
 //    -> dt0 :: DecIPTTL
-//    -> fr0 :: IPFragmenter(1400)
+//    -> fr0 :: IPFragmenter(1500)
 //    -> [0]arpq0;
 //dt0[1] -> ICMPError(10.0.2.15, timeexceeded) -> rt;
 //fr0[1] -> ICMPError(10.0.2.15, unreachable, needfrag) -> rt;
@@ -189,8 +200,8 @@ rt[1] -> Discard;
 rt[2] -> DropBroadcasts
     -> gio1 :: IPGWOptions(172.16.101.11)
     -> dt1 :: DecIPTTL
-    -> fr1 :: IPFragmenter(1400)
-    -> IPPrint(RT2)
+    -> fr1 :: IPFragmenter(1500)
+//    -> IPPrint(RT2)
     -> [0]arpq1;
 dt1[1] -> ICMPError(172.16.101.11, timeexceeded) -> [0]rt;
 fr1[1] -> ICMPError(172.16.101.11, unreachable, needfrag) -> [0]rt;
@@ -200,8 +211,8 @@ gio1[1] -> ICMPError(172.16.101.11, parameterproblem) -> [0]rt;
 rt[3] -> DropBroadcasts
     -> gio2 :: IPGWOptions(172.16.102.11)
     -> dt2 :: DecIPTTL
-    -> fr2 :: IPFragmenter(1400)
-    -> IPPrint(RT3)
+    -> fr2 :: IPFragmenter(1500)
+//    -> IPPrint(RT3)
     -> [0]arpq2;
 dt2[1] -> ICMPError(172.16.102.11, timeexceeded) -> [0]rt;
 fr2[1] -> ICMPError(172.16.102.11, unreachable, needfrag) -> [0]rt;
@@ -211,8 +222,8 @@ gio2[1] -> ICMPError(172.16.102.11, parameterproblem) -> [0]rt;
 rt[4] -> DropBroadcasts
     -> gio3 :: IPGWOptions(172.16.103.11)
     -> dt3 :: DecIPTTL
-    -> fr3 :: IPFragmenter(1400)
-    -> IPPrint(RT4)
+    -> fr3 :: IPFragmenter(1500)
+//    -> IPPrint(RT4)
     -> [0]arpq3;
 dt3[1] -> ICMPError(172.16.103.11, timeexceeded) -> [0]rt;
 fr3[1] -> ICMPError(172.16.103.11, unreachable, needfrag) -> [0]rt;
@@ -222,8 +233,8 @@ gio3[1] -> ICMPError(172.16.103.11, parameterproblem) -> [0]rt;
 rt[5] -> DropBroadcasts
     -> gio4 :: IPGWOptions(172.16.108.11)
     -> dt4 :: DecIPTTL
-    -> fr4 :: IPFragmenter(1400)
-    -> IPPrint(RT5)
+    -> fr4 :: IPFragmenter(1500)
+//    -> IPPrint(RT5)
     -> [0]arpq4;
 dt4[1] -> ICMPError(172.16.108.11, timeexceeded) -> [0]rt;
 fr4[1] -> ICMPError(172.16.108.11, unreachable, needfrag) -> [0]rt;

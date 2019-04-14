@@ -14,7 +14,9 @@ void DDBClassifier::push(int, Packet *p) {
 		out_port = 0;
 	else if (p->anno_u8(DDB_CLASSIFY_ANNO_OFFSET) == DDBPROTO_ANSWER)
 		out_port = 1;
-
+	else if (p->anno_u8(DDB_CLASSIFY_ANNO_OFFSET) == DDBPROTO_ANSWER_NOT_FOUND)
+	        out_port = 1;
+	
 	output(out_port).push(p);
 }
 
