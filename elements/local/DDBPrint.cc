@@ -14,16 +14,16 @@ Packet *DDBPrint::simple_action(Packet *p) {
 	uint8_t anno_val = DDBPROTO_ANSWER + 1;
 
 	if (proto->T == DDBPROTO_REQUEST) {
-		click_chatter("Request: %s", String(proto->Data, DDBPROTO_DATA_LEN).c_str());
+		click_chatter("Request: %s, %s", String(proto->Entry_ID, DDBPROTO_DATA_LEN).c_str());
 		anno_val = (uint8_t) DDBPROTO_REQUEST;
 	} else if (proto->T == DDBPROTO_ANSWER) {
-		click_chatter("Answer: %s", String(proto->Data, DDBPROTO_DATA_LEN).c_str());
+		click_chatter("Answer: %s", String(proto->Entry_ID, DDBPROTO_DATA_LEN).c_str());
 		anno_val = (uint8_t) DDBPROTO_ANSWER;
 	} else if (proto->T == DDBPROTO_ANSWER_NOT_FOUND) {
-		click_chatter("Answer Not Found: %s", String(proto->Data, DDBPROTO_DATA_LEN).c_str());
+		click_chatter("Answer Not Found: %s", String(proto->Entry_ID, DDBPROTO_DATA_LEN).c_str());
 		anno_val = (uint8_t) DDBPROTO_ANSWER_NOT_FOUND;	  
 	} else {
-		click_chatter("ERROR: unknown type for packet, T: %u, Len: %u, Data: %s", proto->T, proto->Len, proto->Data);
+		click_chatter("ERROR: unknown type for packet, T: %u, Len: %u, Entry_ID+Data: %s", proto->T, proto->Len, proto->Entry_ID);
 	}
 
 	p->set_anno_u8(DDB_CLASSIFY_ANNO_OFFSET, anno_val);

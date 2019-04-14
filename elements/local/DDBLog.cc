@@ -46,7 +46,7 @@ Packet *DDBLog::simple_action(Packet *p) {
 	s += "{ Len: ";
 	s += String(proto->Len);
 	s += ", Data: '";
-	s += String(proto->Data, strnlen(proto->Data, DDBPROTO_DATA_LEN)).printable();
+	s += String(proto->Entry_ID, strnlen(proto->Data, DDBPROTO_DATA_LEN)).printable();
 	s += "' }";
 
 	_answers.push_back(s);

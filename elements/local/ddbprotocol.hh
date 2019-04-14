@@ -20,6 +20,8 @@
 
 #define DDB_CLASSIFY_ANNO_OFFSET 4
 
+#define DDBPROTO_EID_LEN 9
+#define DDBPROTO_HASH_LEN 36
 #define DDBPROTO_DATA_LEN 255
 
 #define DDBPROTO_LEN_A 1 << 0
@@ -35,7 +37,9 @@ struct DDBProto {
 //#else
 //#error "Undefined Byte Order!"
 //#endif
-	char Data[DDBPROTO_DATA_LEN];
+    char Entry_ID[DDBPROTO_EID_LEN];
+    char Hash[DDBPROTO_HASH_LEN];
+	char Data[DDBPROTO_DATA_LEN-DDBPROTO_HASH_LEN-DDBPROTO_EID_LEN];
 } CLICK_SIZE_PACKED_ATTRIBUTE;
 
 #endif /* DDBPROTOCOL_HH_ */

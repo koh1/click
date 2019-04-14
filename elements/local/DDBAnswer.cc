@@ -30,10 +30,12 @@ void DDBAnswer::push(int, Packet *p) {
 	click_chatter("DEBUG: destination Port: %u", ntohs(udp_in->uh_dport));
 
 	struct DDBProto *proto = (struct DDBProto*)p->data();
+	String key = String(proto->Entry_ID, DDBPROTO_EID_LEN);
+	String hash = String(proto->Hash, DDBPROTO_HASH_LEN);
 	String s = String(proto->Data, strnlen(proto->Data, DDBPROTO_DATA_LEN));
-	click_chatter("RECEIVED: %d, %d, %s", proto->T, proto->Len, s.printable().c_str());
+	click_chatter("RECEIVED: %d, %d, %s", proto->T, proto->Len, key.printable().c_str());
 	//String res = _msgs.get(s);
-	String res = _msgs.get(s);
+	String res = _msgs.get(key);
 	if (!res) {
 		click_chatter("DEBUG: No response for %s", s.printable().c_str());
 		p->push(28);
@@ -42,13 +44,15 @@ void DDBAnswer::push(int, Packet *p) {
 	}
 
 	int res_len = res.length();
-	res.append_fill('\0', DDBPROTO_DATA_LEN-res_len);
+	res.append_fill('\0', DDBPROTO_DATA_LEN-res_len-DDBPROTO_EID_LEN);
 
 	struct DDBProto resp;
 	resp.T = DDBPROTO_ANSWER;
 	resp.Len = DDBPROTO_DATA_LEN;
+	memcpy(resp.Entry_ID, key.c_str(), DDBPROTO_EID_LEN);
+	memcpy(resp.Hash, hash.c_str(), DDBPROTO_HASH_LEN);
 	memcpy(resp.Data, res.c_str(), DDBPROTO_DATA_LEN);
-    click_chatter("DEBUG: response.T=%u, response.Len=%u, response.Data=%s", resp.T, resp.Len, resp.Data);
+    click_chatter("DEBUG: response.T=%u, response.Len=%u, response.Key=%s, response.Hash=%s, response.Data=%s", resp.T, resp.Len, resp.Entry_ID, resp.Hash, resp.Data);
 	WritablePacket *q = Packet::make(headroom, &resp, sizeof(DDBProto), 0);
 	q->push(sizeof(click_udp) + sizeof(click_ip));
 	click_ip *ip = reinterpret_cast<click_ip *>(q->data());
