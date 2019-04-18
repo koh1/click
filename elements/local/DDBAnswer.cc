@@ -30,28 +30,32 @@ void DDBAnswer::push(int, Packet *p) {
 	click_chatter("DEBUG: destination Port: %u", ntohs(udp_in->uh_dport));
 
 	struct DDBProto *proto = (struct DDBProto*)p->data();
-	String key = String(proto->Entry_ID, DDBPROTO_EID_LEN);
-	String hash = String(proto->Hash, DDBPROTO_HASH_LEN);
-	String s = String(proto->Data, strnlen(proto->Data, DDBPROTO_DATA_LEN));
-	click_chatter("RECEIVED: %d, %d, %s", proto->T, proto->Len, key.printable().c_str());
+	String key = String(proto->Entry_ID, strnlen(proto->Entry_ID, DDBPROTO_EID_LEN));
+	String hash = String(proto->Hash, strnlen(proto->Hash, DDBPROTO_HASH_LEN));
+	String s = String(proto->Data, strnlen(proto->Data, DDBPROTO_DATA_LEN-DDBPROTO_EID_LEN-DDBPROTO_HASH_LEN));
+	click_chatter("RECEIVED: %u, %u, %s, %s, %s", proto->T, proto->Len, key.printable().c_str(), hash.printable().c_str(), s.printable().c_str());
 	//String res = _msgs.get(s);
 	String res = _msgs.get(key);
+	click_chatter("RES: %s", res.printable().c_str());
 	if (!res) {
-		click_chatter("DEBUG: No response for %s", s.printable().c_str());
+		click_chatter("DEBUG: No response for %s", key.printable().c_str());
 		p->push(28);
 		output(1).push(p);
 		return;
 	}
-
 	int res_len = res.length();
-	res.append_fill('\0', DDBPROTO_DATA_LEN-res_len-DDBPROTO_EID_LEN);
-
+	res.append_fill('\0', DDBPROTO_DATA_LEN-res_len-DDBPROTO_EID_LEN-DDBPROTO_HASH_LEN);
+	click_chatter("res.append_fill");
 	struct DDBProto resp;
 	resp.T = DDBPROTO_ANSWER;
 	resp.Len = DDBPROTO_DATA_LEN;
 	memcpy(resp.Entry_ID, key.c_str(), DDBPROTO_EID_LEN);
+	click_chatter("Entry_ID OK");
 	memcpy(resp.Hash, hash.c_str(), DDBPROTO_HASH_LEN);
-	memcpy(resp.Data, res.c_str(), DDBPROTO_DATA_LEN);
+	click_chatter("Hash OK");
+	memcpy(resp.Data, res.c_str(), DDBPROTO_DATA_LEN-DDBPROTO_EID_LEN-DDBPROTO_HASH_LEN);
+	click_chatter("Data OK");
+	click_chatter("resp filled");
     click_chatter("DEBUG: response.T=%u, response.Len=%u, response.Key=%s, response.Hash=%s, response.Data=%s", resp.T, resp.Len, resp.Entry_ID, resp.Hash, resp.Data);
 	WritablePacket *q = Packet::make(headroom, &resp, sizeof(DDBProto), 0);
 	q->push(sizeof(click_udp) + sizeof(click_ip));
