@@ -1,7 +1,6 @@
 #include <click/config.h>
 // #include <click/TODO.hh>
 #include "DDBCacheProto.hh"
-#include "DummyProto.hh"
 
 CLICK_DECLS
 
