@@ -8,9 +8,8 @@
 rt :: StaticIPLookup(
    	10.0.2.15/32 0,
 	10.0.2.255/32 0,
-	10.0.2.0/32 0,
-	192.168.148.70/32 0,
-	192.168.147.70/32 0,
+//	192.168.148.70/32 0,
+//	192.168.147.70/32 0,
 	192.168.148.255/32 0,
 	192.168.147.255/32 0,
 	10.0.2.0/255.255.255.0 1,
@@ -67,7 +66,7 @@ rt[0] -> Discard;
 // Forwarding path for enp0s3
 
 rt[1] -> DropBroadcasts
-    -> cp0 :: PaintTee(1)
+//    -> cp0 :: PaintTee(1)
     -> gio0 :: IPGWOptions(10.0.2.15)
 //    -> FixIPSrc(10.0.2.15)
     -> dt0 :: DecIPTTL
@@ -76,7 +75,7 @@ rt[1] -> DropBroadcasts
 dt0[1] -> ICMPError(10.0.2.15, timeexceeded) -> [0]rt;
 fr0[1] -> ICMPError(10.0.2.15, unreachable, needfrag) -> [0]rt;
 gio0[1] -> ICMPError(10.0.2.15, parameterproblem) -> [0]rt;
-cp0[1] -> ICMPError(10.0.2.15, redirect, host) -> [0]rt;
+//cp0[1] -> ICMPError(10.0.2.15, redirect, host) -> [0]rt;
 
 // Forwarding path for enp0s8
 rt[2] -> DropBroadcasts
