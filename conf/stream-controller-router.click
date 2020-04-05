@@ -73,10 +73,10 @@ rt[1] -> DropBroadcasts
     -> dt0 :: DecIPTTL
     -> fr0 :: IPFragmenter(1500)
     -> [0]arpq0;
-dt0[1] -> ICMPError(10.0.2.15, timeexceeded) -> rt;
-fr0[1] -> ICMPError(10.0.2.15, unreachable, needfrag) -> rt;
-gio0[1] -> ICMPError(10.0.2.15, parameterproblem) -> rt;
-cp0[1] -> ICMPError(10.0.2.15, redirect, host) -> rt;
+dt0[1] -> ICMPError(10.0.2.15, timeexceeded) -> [0]rt;
+fr0[1] -> ICMPError(10.0.2.15, unreachable, needfrag) -> [0]rt;
+gio0[1] -> ICMPError(10.0.2.15, parameterproblem) -> [0]rt;
+cp0[1] -> ICMPError(10.0.2.15, redirect, host) -> [0]rt;
 
 // Forwarding path for enp0s9
 rt[3] -> DropBroadcasts
