@@ -43,7 +43,7 @@ out1 :: Queue(1024) -> todevice1 :: ToDevice(enp0s8);
 c1[0] -> ar1 :: ARPResponder(192.168.148.70 08:00:27:c2:73:e7) -> out1;
 arpq1 :: ARPQuerier(192.168.148.70, 08:00:27:c2:73:e7) -> out1;
 c1[1] -> [1]arpq1;
-c1[2] -> Print("enp0s8") -> [0]rt;
+c1[2] -> [0]rt;
 //c1[3] -> Print("enp0s8 non-IP") -> Discard;
 c1[3] -> Discard
 
@@ -55,7 +55,7 @@ out2 :: Queue(1024) -> todevice2 :: ToDevice(enp0s9);
 c2[0] -> ar2 :: ARPResponder(192.168.147.11 08:00:27:36:70:32) -> out2;
 arpq2 :: ARPQuerier(192.168.147.11, 08:00:27:36:70:32) -> out2;
 c2[1] -> [1]arpq2;
-c2[2] -> Print("enp0s9") -> [0]rt;
+c2[2] -> [0]rt;
 //c2[3] -> Print("enp0s9 non-IP") -> Discard;
 c2[3] -> Discard
 
@@ -80,7 +80,7 @@ cp0[1] -> ICMPError(10.0.2.15, redirect, host) -> [0]rt;
 
 // Forwarding path for enp0s8
 rt[2] -> DropBroadcasts
-    -> IPPrint("enp0s8-IP")
+//    -> IPPrint("enp0s8-IP")
     -> gio1 :: IPGWOptions(192.168.148.70)
     -> dt1 :: DecIPTTL
     -> fr1 :: IPFragmenter(1500)
@@ -93,11 +93,11 @@ gio1[1] -> ICMPError(192.168.148.70, parameterproblem) -> [0]rt;
 
 // Forwarding path for enp0s9
 rt[3] -> DropBroadcasts
-    -> IPPrint("enp0s9-IP")
+//    -> IPPrint("enp0s9-IP")
     -> gio2 :: IPGWOptions(192.168.147.70)
     -> dt2 :: DecIPTTL
     -> fr2 :: IPFragmenter(1500)
-//    -> IPPrint(RT3)
+    -> IPPrint(RT3)
     -> [0]arpq2;
 dt2[1] -> ICMPError(192.168.147.70, timeexceeded) -> [0]rt;
 fr2[1] -> ICMPError(192.168.147.70, unreachable, needfrag) -> [0]rt;
