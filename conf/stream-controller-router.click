@@ -13,7 +13,6 @@ rt :: StaticIPLookup(
 	192.168.147.70/32 0,
 	192.168.148.255/32 0,
 	192.168.147.255/32 0,
-
 	10.0.2.0/255.255.255.0 1,
 	192.168.148.0/255.255.255.0 2,
 	192.168.147.0/255.255.255.0 3,
@@ -44,7 +43,7 @@ out1 :: Queue(1024) -> todevice1 :: ToDevice(enp0s8);
 c1[0] -> ar1 :: ARPResponder(192.168.148.70 08:00:27:c2:73:e7) -> out1;
 arpq1 :: ARPQuerier(192.168.148.70, 08:00:27:c2:73:e7) -> out1;
 c1[1] -> [1]arpq1;
-c1[2] -> [0]rt;
+c1[2] -> Print("enp0s8") -> [0]rt;
 //c1[3] -> Print("enp0s8 non-IP") -> Discard;
 c1[3] -> Discard
 
@@ -56,7 +55,7 @@ out2 :: Queue(1024) -> todevice2 :: ToDevice(enp0s9);
 c2[0] -> ar2 :: ARPResponder(192.168.147.11 08:00:27:36:70:32) -> out2;
 arpq2 :: ARPQuerier(192.168.147.11, 08:00:27:36:70:32) -> out2;
 c2[1] -> [1]arpq2;
-c2[2] -> [0]rt;
+c2[2] -> Print("enp0s9") -> [0]rt;
 //c2[3] -> Print("enp0s9 non-IP") -> Discard;
 c2[3] -> Discard
 
