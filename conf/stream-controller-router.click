@@ -32,7 +32,8 @@ c0[0] -> ar0 :: ARPResponder(10.0.2.15 02:48:3e:15:b5:0c) -> out0;
 arpq0 :: ARPQuerier(10.0.2.15, 02:48:3e:15:b5:0c) -> out0;
 c0[1] -> [1]arpq0;
 c0[2] -> Paint(1) -> Discard;
-c0[3] -> Print("enp0s3 non-IP") -> Discard;
+//c0[3] -> Print("enp0s3 non-IP") -> Discard;
+c0[3] -> Discard
 
 // Input and output paths for enp0s8
 
@@ -44,7 +45,8 @@ c1[0] -> ar1 :: ARPResponder(192.168.148.70 08:00:27:c2:73:e7) -> out1;
 arpq1 :: ARPQuerier(192.168.148.70, 08:00:27:c2:73:e7) -> out1;
 c1[1] -> [1]arpq1;
 c1[2] -> [0]rt;
-c1[3] -> Print("enp0s8 non-IP") -> Discard;
+//c1[3] -> Print("enp0s8 non-IP") -> Discard;
+c1[3] -> Discard
 
 
 // Input and output paths for enp0s9
@@ -55,7 +57,8 @@ c2[0] -> ar2 :: ARPResponder(192.168.147.11 08:00:27:36:70:32) -> out2;
 arpq2 :: ARPQuerier(192.168.147.11, 08:00:27:36:70:32) -> out2;
 c2[1] -> [1]arpq2;
 c2[2] -> [0]rt;
-c2[3] -> Print("enp0s9 non-IP") -> Discard;
+//c2[3] -> Print("enp0s9 non-IP") -> Discard;
+c2[3] -> Discard
 
 
 // Local delivery
