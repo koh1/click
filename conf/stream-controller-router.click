@@ -4,6 +4,7 @@
 // enp0s9 192.168.147.70 08:00:27:63:4f:c6
 
 // Shared IP input path and routing table
+//chkip :: CheckIPHeader
 
 rt :: StaticIPLookup(
    	10.0.2.15/32 0,
@@ -13,8 +14,8 @@ rt :: StaticIPLookup(
 	192.168.148.255/32 0,
 	192.168.147.255/32 0,
 	10.0.2.0/255.255.255.0 1,
-	192.168.148.0/24 2,
-	192.168.147.0/24 3,
+	192.168.148.0/255.255.255.0 2,
+	192.168.147.0/255.255.255.0 3,
 	255.255.255.255/32 0.0.0.0 0,
 //	0.0.0.0/32 0,
 	0.0.0.0/0.0.0.0 10.0.2.15 0);
@@ -42,7 +43,7 @@ out1 :: Queue(1024) -> todevice1 :: ToDevice(enp0s8);
 c1[0] -> ar1 :: ARPResponder(192.168.148.70 08:00:27:c2:73:e7) -> out1;
 arpq1 :: ARPQuerier(192.168.148.70, 08:00:27:c2:73:e7) -> out1;
 c1[1] -> [1]arpq1;
-c1[2] -> [0]rt;
+c1[2] -> Strip(14) -> [0]rt;
 //c1[3] -> Print("enp0s8 non-IP") -> Discard;
 c1[3] -> Discard
 
@@ -60,13 +61,13 @@ c2[3] -> Discard
 
 
 // Local delivery
-//toh :: Print(toh) -> Discard;
-rt[0] -> Discard;
+toh :: IPPrint(ToHost) -> Discard;
+rt[0] -> Strip(2) -> toh;
 
 // Forwarding path for enp0s3
-
+//rt[1] -> toh;
 rt[1] -> DropBroadcasts
-//    -> cp0 :: PaintTee(1)
+    -> cp0 :: PaintTee(1)
     -> gio0 :: IPGWOptions(10.0.2.15)
 //    -> FixIPSrc(10.0.2.15)
     -> dt0 :: DecIPTTL
@@ -75,7 +76,7 @@ rt[1] -> DropBroadcasts
 dt0[1] -> ICMPError(10.0.2.15, timeexceeded) -> [0]rt;
 fr0[1] -> ICMPError(10.0.2.15, unreachable, needfrag) -> [0]rt;
 gio0[1] -> ICMPError(10.0.2.15, parameterproblem) -> [0]rt;
-//cp0[1] -> ICMPError(10.0.2.15, redirect, host) -> [0]rt;
+cp0[1] -> ICMPError(10.0.2.15, redirect, host) -> [0]rt;
 
 // Forwarding path for enp0s8
 rt[2] -> DropBroadcasts
