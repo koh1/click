@@ -59,8 +59,8 @@ c2[3] -> Print("enp0s9 non-IP") -> Discard;
 
 
 // Local delivery
-toh :: Print(toh) -> Discard;
-rt[0] -> toh;
+//toh :: Print(toh) -> Discard;
+rt[0] -> Discard;
 
 // Forwarding path for enp0s3
 
