@@ -17,7 +17,7 @@ rt :: StaticIPLookup(
 	192.168.147.0/24 3,
 	255.255.255.255/32 0.0.0.0 0,
 //	0.0.0.0/32 0,
-	0.0.0.0/0.0.0.0 192.168.148.1 2);
+	0.0.0.0/0.0.0.0 10.0.2.15 0);
 
 // ARP responses are copied to each ARPQuerier and the host.
 //arpt :: Tee(6);
