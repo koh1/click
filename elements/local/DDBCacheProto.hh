@@ -20,9 +20,12 @@ TODO: Summary
 TODO: Complete description
 
 */
+
+HashTable<String, String> _cache;
+
 class DDBCacheProto : public Element {
 	//TODO: Add private attributes
-	HashTable<String, String> _cache;
+
 
 	public:
 		DDBCacheProto();
@@ -30,9 +33,10 @@ class DDBCacheProto : public Element {
 
 		const char *class_name() const { return "DDBCacheProto"; }
 		const char *port_count() const { return "2/2"; }
-		const char *processing() const { return PUSH; }
+		const char *processing() const { return AGNOSTIC; }
+		void push(int, Packet *);
+		Packet *pull(int);
 
-		Packet *simple_action(Packet *p);
 };
 
 CLICK_ENDDECLS
