@@ -80,7 +80,7 @@ cp0[1] -> ICMPError(10.0.2.15, redirect, host) -> [0]rt;
 
 // Forwarding path for enp0s8
 rt[2] -> DropBroadcasts
-    -> IPPrint("enp0s8")
+    -> IPPrint("enp0s8-IP")
     -> gio1 :: IPGWOptions(192.168.148.70)
     -> dt1 :: DecIPTTL
     -> fr1 :: IPFragmenter(1500)
@@ -93,7 +93,7 @@ gio1[1] -> ICMPError(192.168.148.70, parameterproblem) -> [0]rt;
 
 // Forwarding path for enp0s9
 rt[3] -> DropBroadcasts
-    -> IPPrint("enp0s9")
+    -> IPPrint("enp0s9-IP")
     -> gio2 :: IPGWOptions(192.168.147.70)
     -> dt2 :: DecIPTTL
     -> fr2 :: IPFragmenter(1500)
