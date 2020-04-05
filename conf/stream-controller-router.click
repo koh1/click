@@ -65,7 +65,7 @@ toh :: Print(toh) -> Discard;
 rt[0] -> toh;
 
 // Forwarding path for enp0s3
-rt[1] -> Discard;
+
 rt[1] -> DropBroadcasts
     -> cp0 :: PaintTee(1)
     -> gio0 :: IPGWOptions(10.0.2.15)
@@ -78,6 +78,18 @@ fr0[1] -> ICMPError(10.0.2.15, unreachable, needfrag) -> [0]rt;
 gio0[1] -> ICMPError(10.0.2.15, parameterproblem) -> [0]rt;
 cp0[1] -> ICMPError(10.0.2.15, redirect, host) -> [0]rt;
 
+// Forwarding path for enp0s8
+rt[2] -> DropBroadcasts
+    -> gio1 :: IPGWOptions(192.168.148.70)
+    -> dt1 :: DecIPTTL
+    -> fr1 :: IPFragmenter(1500)
+    -> IPPrint(RT2)
+    -> [0]arpq1;
+dt1[1] -> ICMPError(192.168.148.70, timeexceeded) -> [0]rt;
+fr1[1] -> ICMPError(192.168.148.70, unreachable, needfrag) -> [0]rt;
+gio1[1] -> ICMPError(192.168.148.70, parameterproblem) -> [0]rt;
+
+
 // Forwarding path for enp0s9
 rt[3] -> DropBroadcasts
     -> gio2 :: IPGWOptions(192.168.147.70)
@@ -89,13 +101,3 @@ dt2[1] -> ICMPError(192.168.147.70, timeexceeded) -> [0]rt;
 fr2[1] -> ICMPError(192.168.147.70, unreachable, needfrag) -> [0]rt;
 gio2[1] -> ICMPError(192.168.147.70, parameterproblem) -> [0]rt;
 
-// Forwarding path for enp0s8
-rt[2] -> DropBroadcasts
-    -> gio1 :: IPGWOptions(192.168.148.70)
-    -> dt1 :: DecIPTTL
-    -> fr1 :: IPFragmenter(1500)
-    -> IPPrint(RT2)
-    -> [0]arpq1;
-dt1[1] -> ICMPError(192.168.148.70, timeexceeded) -> [0]rt;
-fr1[1] -> ICMPError(192.168.148.70, unreachable, needfrag) -> [0]rt;
-gio1[1] -> ICMPError(192.168.148.70, parameterproblem) -> [0]rt;
